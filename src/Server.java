@@ -101,10 +101,6 @@ public class Server {
             State.Ips.put(State.discoveryIp, new JSONObject().put("Status", "activated").put("time", new Date()));
             State.hash = CheckSum.md5(new JSONObject().put("KV", State.KV).put("Ips", State.Ips).toString());
         }
-
-        System.out.println(State.KV);
-        System.out.println(State.Ips);
-        System.out.println(State.hash);
     }
 
     public static void dumpToDisk() {
