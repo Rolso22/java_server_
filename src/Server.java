@@ -3,8 +3,6 @@ import java.net.InetSocketAddress;
 import com.sun.net.httpserver.HttpServer;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.net.Socket;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Server {
@@ -61,9 +59,7 @@ public class Server {
 
         Init(args);
 
-        System.out.println(new SimpleDateFormat(State.format).format(new Date()));
-
-/*        Thread receiverThread = new Thread(new WorkReceiver());
+        Thread receiverThread = new Thread(new WorkReceiver());
         receiverThread.start();
 
         Thread dispatcherThread = new WorkDispatcher();
@@ -72,7 +68,7 @@ public class Server {
         HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", State.clientPort), 0);
         server.createContext("/", new HomeHandler());
         server.setExecutor(null);
-        server.start();*/
+        server.start();
     }
 
     public static void Init(String[] args) {
