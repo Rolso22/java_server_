@@ -66,9 +66,21 @@ public class Server {
 
     public static void Init(String[] args) {
 
+        if (args.length < 4) {
+            System.out.println("not enough arguments");
+            System.exit(1);
+        }
         State.clusterName = args[0]; // myCluster
         State.nodeName = args[1]; // myNode
+        if (Integer.parseInt(args[2]) < 1024 && Integer.parseInt(args[2]) > 49151) {
+            System.out.println("techPort is incorrect");
+            System.exit(1);
+        }
         State.techPort = Integer.parseInt(args[2]); // 8080
+        if (Integer.parseInt(args[3]) < 1024 && Integer.parseInt(args[3]) > 49151) {
+            System.out.println("clientPort is incorrect");
+            System.exit(1);
+        }
         State.clientPort = Integer.parseInt(args[3]); // 9080
         if (args.length == 5) {
             State.discoveryIp = args[4];
