@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -53,7 +54,7 @@ public class HomeHandler implements HttpHandler {
         String line = isr.readLine();
         JSONObject data = new JSONObject(line);
         if (putValue.equals(data.get("Type"))) {
-            Server.putValue(data.get("Key").toString(), data.get("Value").toString(), new Date());
+            Server.putValue(data.get("Key").toString(), data.get("Value").toString(), new SimpleDateFormat(Server.State.format).format(new Date()));
             request = "OK\n";
         }
 

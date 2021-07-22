@@ -1,6 +1,8 @@
 import org.json.JSONObject;
 import java.io.*;
 import java.net.Socket;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -44,9 +46,15 @@ class ClientSock extends Thread {
                 if (!data.getJSONObject(ind).getString("value").equals(copy.getJSONObject(ind).getString("value"))) {
                     JSONObject x = copy.getJSONObject(ind);
                     JSONObject y = data.getJSONObject(ind);
-                    Date t1 = (Date) x.get("time");
-                    Date t2 = (Date) y.get("time");
-                    if (t1.after(t2)) {
+                    Date t1 = null;
+                    Date t2 = null;
+                    try {
+                        t1 = new SimpleDateFormat(Server.State.format).parse(x.getString("time"));
+                        t2 = new SimpleDateFormat(Server.State.format).parse(y.getString("time"));
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    if (t1 != null && t1.after(t2)) {
                         copy.put(ind, data.get(ind));
                     }
                 }
@@ -80,9 +88,15 @@ class ClientSock extends Thread {
                 if (!data.getJSONObject(ind).getString("status").equals(copy.getJSONObject(ind).getString("status"))) {
                     JSONObject x = copy.getJSONObject(ind);
                     JSONObject y = data.getJSONObject(ind);
-                    Date t1 = (Date) x.get("time");
-                    Date t2 = (Date) y.get("time");
-                    if (t1.after(t2)) {
+                    Date t1 = null;
+                    Date t2 = null;
+                    try {
+                        t1 = new SimpleDateFormat(Server.State.format).parse(x.getString("time"));
+                        t2 = new SimpleDateFormat(Server.State.format).parse(y.getString("time"));
+                    } catch (ParseException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    if (t1 != null && t1.after(t2)) {
                         copy.put(ind, data.get(ind));
                     }
                 }

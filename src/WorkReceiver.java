@@ -3,6 +3,7 @@ import org.json.JSONObject;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -40,7 +41,7 @@ class ServerSock extends Thread {
             while (true) {
                 JSONObject line = new JSONObject(in.readLine());
                 if (Server.State.Ips.opt(line.getString("Ip")) == null) {
-                    Server.State.Ips.put(line.getString("Ip"), new JSONObject().put("Status", "activated").put("time", new Date()));
+                    Server.State.Ips.put(line.getString("Ip"), new JSONObject().put("Status", "activated").put("time", new SimpleDateFormat(Server.State.format).format(new Date())));
                     WorkDispatcher.addNode(new JSONObject().put(line.getString("Ip"), "{}"));
                 }
                 out.write(createAnswer(line.getString("Type")));

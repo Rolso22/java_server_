@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpServer;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Server {
@@ -23,6 +24,7 @@ public class Server {
         public static String hash;
         public static String hashKV;
         public static String hashIps;
+        public static String format = "yyyy-MM-dd HH:mm:ss z";
     }
 
     public static void updateHash(String hash) {
@@ -32,6 +34,7 @@ public class Server {
             State.hashIps = CheckSum.md5(State.Ips.toString());
         }
         State.hash = CheckSum.md5(new JSONObject().put("KV", State.KV).put("Ips", State.Ips).toString());
+        dumpToDisk();
     }
 
     public static String getValue(String key) {
@@ -45,7 +48,7 @@ public class Server {
         return data.get("value").toString();
     }
 
-    public static void putValue(String key, String value, Date time) {
+    public static void putValue(String key, String value, String time) {
         JSONObject data = new JSONObject();
         data.put("value", value);
         data.put("time", time);
@@ -58,7 +61,9 @@ public class Server {
 
         Init(args);
 
-        Thread receiverThread = new Thread(new WorkReceiver());
+        System.out.println(new SimpleDateFormat(State.format).format(new Date()));
+
+/*        Thread receiverThread = new Thread(new WorkReceiver());
         receiverThread.start();
 
         Thread dispatcherThread = new WorkDispatcher();
@@ -67,7 +72,7 @@ public class Server {
         HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", State.clientPort), 0);
         server.createContext("/", new HomeHandler());
         server.setExecutor(null);
-        server.start();
+        server.start();*/
     }
 
     public static void Init(String[] args) {
@@ -97,13 +102,8 @@ public class Server {
                 System.out.println(e.getMessage());
             }
         } else {
-            try {
-                State.Ips.put(State.discoveryIp, new JSONObject().put("Status", "activated").put("time", new Date()));
-                State.hash = CheckSum.md5(new JSONObject().put("KV", State.KV).put("Ips", State.Ips).toString());
-                Recorder.writeToDisk();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
+            State.Ips.put(State.discoveryIp, new JSONObject().put("Status", "activated").put("time", new Date()));
+            State.hash = CheckSum.md5(new JSONObject().put("KV", State.KV).put("Ips", State.Ips).toString());
         }
 
         System.out.println(State.KV);
