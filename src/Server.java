@@ -20,17 +20,10 @@ public class Server {
         public static String statePath;
 
         public static String hash;
-        public static String hashKV;
-        public static String hashIps;
         public static String format = "yyyy-MM-dd HH:mm:ss z";
     }
 
     public static void updateHash(String hash) {
-        if ("hashKV".equals(hash)) {
-            State.hashKV = CheckSum.md5(State.KV.toString());
-        } else if ("hashIps".equals(hash)) {
-            State.hashIps = CheckSum.md5(State.Ips.toString());
-        }
         State.hash = CheckSum.md5(new JSONObject().put("KV", State.KV).put("Ips", State.Ips).toString());
         dumpToDisk();
     }
@@ -91,8 +84,6 @@ public class Server {
                     State.hash = CheckSum.md5(new JSONObject().put("KV", State.KV).put("Ips", State.Ips).toString());
                     Recorder.writeToDisk();
                 }
-                State.hashKV = CheckSum.md5(State.KV.toString());
-                State.hashIps = CheckSum.md5(State.Ips.toString());
                 State.hash = CheckSum.md5(new JSONObject().put("KV", State.KV).put("Ips", State.Ips).toString());
             } catch (IOException e) {
                 System.out.println(e.getMessage());

@@ -26,13 +26,14 @@ class ClientSock extends Thread {
 
     public void checkKV() throws IOException {
         JSONObject request = new JSONObject().put("Type", getHashKV).put("Ip", "127.0.0.1:" + Server.State.techPort);
-        out.write(request.toString());
+        out.write(request.toString() + "\n");
         out.flush();
         String line = in.readLine();
-        if (!line.equals(Server.State.hashKV)) {
-            out.write(request.put("Type", getKV).toString());
+        if (!line.equals(CheckSum.md5(Server.State.KV.toString()))) {
+            out.write(request.put("Type", getKV).toString() + "\n");
             out.flush();
             line = in.readLine();
+            System.out.println("kv: " + line);
             updateKV(new JSONObject(line));
         }
     }
@@ -62,24 +63,25 @@ class ClientSock extends Thread {
                 copy.put(ind, data.get(ind));
             }
         }
-        Server.State.KV = new JSONObject(copy);
+        Server.State.KV = new JSONObject(copy.toString());
         Server.updateHash("hashKV");
     }
 
-    public void checkIps() throws IOException {
+    public void checkIps() throws IOException, InterruptedException {
         JSONObject request = new JSONObject().put("Type", getHashIps).put("Ip", "127.0.0.1:" + Server.State.techPort);
         System.out.println("check ips до отправки запроса о хэше");
-        out.write(request.toString());
+        out.write(request.toString() + "\n");
         out.flush();
         System.out.println("check ips после отправки запроса о хэше");
         String line = in.readLine();
-        System.out.println("check ips после отправки запроса о хэше, пришел ответ");
-        if (!line.equals(Server.State.hashIps)) {
+        System.out.println("check ips после отправки запроса о хэше, пришел ответ\n" + line);
+        if (!line.equals(CheckSum.md5(Server.State.Ips.toString()))) {
             System.out.println("не совпал кэш, дай мне все айпи");
-            out.write(request.put("Type", getIps).toString());
+            out.write(request.put("Type", getIps).toString() + "\n");
             out.flush();
-            line = in.readLine();
-            updateIps(new JSONObject(line));
+            String line2 = in.readLine();
+            System.out.println("line:" + line2);
+            updateIps(new JSONObject(line2));
         }
     }
 
@@ -89,7 +91,7 @@ class ClientSock extends Thread {
         while (itr.hasNext()) {
             String ind = itr.next();
             if (copy.opt(ind) != null) {
-                if (!data.getJSONObject(ind).getString("status").equals(copy.getJSONObject(ind).getString("status"))) {
+                if (!data.getJSONObject(ind).getString("Status").equals(copy.getJSONObject(ind).getString("Status"))) {
                     JSONObject x = copy.getJSONObject(ind);
                     JSONObject y = data.getJSONObject(ind);
                     Date t1 = null;
@@ -108,7 +110,7 @@ class ClientSock extends Thread {
                 copy.put(ind, data.get(ind));
             }
         }
-        Server.State.Ips = new JSONObject(copy);
+        Server.State.Ips = new JSONObject(copy.toString());
         Server.updateHash("hashIps");
     }
 
@@ -119,7 +121,7 @@ class ClientSock extends Thread {
                 System.out.println("запустил диспетчера");
                 checkIps();
                 checkKV();
-                Thread.sleep(3000);
+                Thread.sleep(1000);
             }
         } catch (IOException | InterruptedException e) {
             System.out.println(e.getMessage());
@@ -132,11 +134,12 @@ public class WorkDispatcher extends Thread {
     public static LinkedList<ClientSock> clientList = new LinkedList<>();
 
     public static void addNode(JSONObject node) {
-        System.out.println(node);
+        System.out.println("node: " + node);
         Iterator<String> itr = node.keys();
         while (itr.hasNext()) {
             String nod = itr.next();
-            System.out.println(nod);
+            System.out.println("nod: " + nod);
+            if (Integer.parseInt(nod.split(":")[1]) == Server.State.techPort) {break;}
             try {
                 clientList.add(new ClientSock(new Socket(nod.split(":")[0], Integer.parseInt(nod.split(":")[1]))));
             } catch (IOException e) {

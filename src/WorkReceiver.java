@@ -21,8 +21,8 @@ class ServerSock extends Thread {
         switch (line) {
             case getIps: return Server.State.Ips.toString() + "\n";
             case getKV: return Server.State.KV.toString() + "\n";
-            case getHashKV: return Server.State.hashKV + "\n";
-            case getHashIps: return Server.State.hashIps + "\n";
+            case getHashKV: return CheckSum.md5(Server.State.KV.toString()) + "\n";
+            case getHashIps: return CheckSum.md5(Server.State.Ips.toString()) + "\n";
 
         }
         return "invalid\n";
@@ -43,10 +43,13 @@ class ServerSock extends Thread {
                 JSONObject line = new JSONObject(in.readLine());
                 System.out.println("запрос принят\n" + line);
                 if (Server.State.Ips.opt(line.getString("Ip")) == null) {
+                    System.out.println("добавление новой ноды, line: " + line);
                     Server.State.Ips.put(line.getString("Ip"), new JSONObject().put("Status", "activated").put("time", new SimpleDateFormat(Server.State.format).format(new Date())));
                     WorkDispatcher.addNode(new JSONObject().put(line.getString("Ip"), "{}"));
                     System.out.println("записал новую ноду");
+                    System.out.println("ips: " + Server.State.Ips);
                 }
+                System.out.println("answer: " + createAnswer(line.getString("Type")));
                 out.write(createAnswer(line.getString("Type")));
                 out.flush();
                 System.out.println("отправил ответ от сервера");
