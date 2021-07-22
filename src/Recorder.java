@@ -8,7 +8,7 @@ public class Recorder {
     public static boolean createFile() {
         Properties p = System.getProperties();
         Server.State.statePath = p.getProperty("user.dir");
-        File file = new File(Server.State.statePath + "/" + "Store.txt");
+        File file = new File(Server.State.statePath + "/" + "Store-" + Server.State.techPort + ".txt");
         boolean isExist = file.exists();
         if (!isExist) {
             try {
@@ -21,7 +21,7 @@ public class Recorder {
     }
 
     public static void loadFromDisk() throws IOException {
-        FileInputStream fin = new FileInputStream(Server.State.statePath + "/" + "Store.txt");
+        FileInputStream fin = new FileInputStream(Server.State.statePath + "/" + "Store-" + Server.State.techPort + ".txt");
         byte[] buffer = new byte[fin.available()];
         fin.read(buffer, 0, buffer.length);
         fin.close();
@@ -43,7 +43,7 @@ public class Recorder {
                 .put("Ips", Server.State.Ips);
         String encodedString = Base64.getEncoder().encodeToString(state.toString().getBytes());
 
-        FileOutputStream fout = new FileOutputStream(Server.State.statePath + "/" + "Store.txt", false);
+        FileOutputStream fout = new FileOutputStream(Server.State.statePath + "/" + "Store-" + Server.State.techPort + ".txt", false);
         byte[] buffer = encodedString.getBytes();
         fout.write(buffer, 0, buffer.length);
         fout.close();
