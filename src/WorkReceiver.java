@@ -39,13 +39,17 @@ class ServerSock extends Thread {
     public void run() {
         try {
             while (true) {
+                System.out.println("жду запрос");
                 JSONObject line = new JSONObject(in.readLine());
+                System.out.println("запрос принят\n" + line);
                 if (Server.State.Ips.opt(line.getString("Ip")) == null) {
                     Server.State.Ips.put(line.getString("Ip"), new JSONObject().put("Status", "activated").put("time", new SimpleDateFormat(Server.State.format).format(new Date())));
                     WorkDispatcher.addNode(new JSONObject().put(line.getString("Ip"), "{}"));
+                    System.out.println("записал новую ноду");
                 }
                 out.write(createAnswer(line.getString("Type")));
                 out.flush();
+                System.out.println("отправил ответ от сервера");
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -63,6 +67,7 @@ public class WorkReceiver implements Runnable {
             ServerSocket serverSocket = new ServerSocket(Server.State.techPort);
             while (true) {
                 Socket socket = serverSocket.accept();
+                System.out.println("есть подключение");
                 serverList.add(new ServerSock(socket));
             }
         } catch (IOException e) {

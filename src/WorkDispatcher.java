@@ -25,7 +25,7 @@ class ClientSock extends Thread {
     }
 
     public void checkKV() throws IOException {
-        JSONObject request = new JSONObject().put("Type", getHashKV).put("Ip", "127.0.0.1" + Server.State.techPort);
+        JSONObject request = new JSONObject().put("Type", getHashKV).put("Ip", "127.0.0.1:" + Server.State.techPort);
         out.write(request.toString());
         out.flush();
         String line = in.readLine();
@@ -67,11 +67,15 @@ class ClientSock extends Thread {
     }
 
     public void checkIps() throws IOException {
-        JSONObject request = new JSONObject().put("Type", getHashIps).put("Ip", "127.0.0.1" + Server.State.techPort);
+        JSONObject request = new JSONObject().put("Type", getHashIps).put("Ip", "127.0.0.1:" + Server.State.techPort);
+        System.out.println("check ips до отправки запроса о хэше");
         out.write(request.toString());
         out.flush();
+        System.out.println("check ips после отправки запроса о хэше");
         String line = in.readLine();
+        System.out.println("check ips после отправки запроса о хэше, пришел ответ");
         if (!line.equals(Server.State.hashIps)) {
+            System.out.println("не совпал кэш, дай мне все айпи");
             out.write(request.put("Type", getIps).toString());
             out.flush();
             line = in.readLine();
@@ -112,6 +116,7 @@ class ClientSock extends Thread {
     public void run() {
         try {
             while (true) {
+                System.out.println("запустил диспетчера");
                 checkIps();
                 checkKV();
                 Thread.sleep(3000);
@@ -127,9 +132,11 @@ public class WorkDispatcher extends Thread {
     public static LinkedList<ClientSock> clientList = new LinkedList<>();
 
     public static void addNode(JSONObject node) {
+        System.out.println(node);
         Iterator<String> itr = node.keys();
         while (itr.hasNext()) {
             String nod = itr.next();
+            System.out.println(nod);
             try {
                 clientList.add(new ClientSock(new Socket(nod.split(":")[0], Integer.parseInt(nod.split(":")[1]))));
             } catch (IOException e) {
