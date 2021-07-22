@@ -45,7 +45,6 @@ public class Server {
         data.put("time", time);
         State.KV.put(key, data);
         update();
-        dumpToDisk();
     }
 
     public static void main(String[] args) throws IOException {
@@ -94,7 +93,6 @@ public class Server {
                 if (!hash.equals(State.hash)) {
                     System.out.println("FILE FROM DISK IS INCORRECT");
                     State.hash = CheckSum.md5(new JSONObject().put("KV", State.KV).put("Ips", State.Ips).toString());
-                    Recorder.writeToDisk();
                 }
                 State.hash = CheckSum.md5(new JSONObject().put("KV", State.KV).put("Ips", State.Ips).toString());
             } catch (IOException e) {
