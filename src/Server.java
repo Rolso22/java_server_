@@ -23,7 +23,7 @@ public class Server {
         public static String format = "yyyy-MM-dd HH:mm:ss z";
     }
 
-    public static void updateHash(String hash) {
+    public static void update() {
         State.hash = CheckSum.md5(new JSONObject().put("KV", State.KV).put("Ips", State.Ips).toString());
         dumpToDisk();
     }
@@ -44,7 +44,7 @@ public class Server {
         data.put("value", value);
         data.put("time", time);
         State.KV.put(key, data);
-        updateHash("hashKV");
+        update();
         dumpToDisk();
     }
 

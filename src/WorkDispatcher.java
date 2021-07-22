@@ -64,7 +64,7 @@ class ClientSock extends Thread {
             }
         }
         Server.State.KV = new JSONObject(copy.toString());
-        Server.updateHash("hashKV");
+        Server.update();
     }
 
     public void checkIps() throws IOException, InterruptedException {
@@ -111,7 +111,7 @@ class ClientSock extends Thread {
             }
         }
         Server.State.Ips = new JSONObject(copy.toString());
-        Server.updateHash("hashIps");
+        Server.update();
     }
 
     @Override
