@@ -48,14 +48,14 @@ class ClientSock extends Thread {
         while (itr.hasNext()) {
             String ind = itr.next();
             if (copy.opt(ind) != null) {
-                if (!data.getJSONObject(ind).getString("Value").equals(copy.getJSONObject(ind).getString("Value"))) {
+                if (!data.getJSONObject(ind).getString("value").equals(copy.getJSONObject(ind).getString("value"))) {
                     JSONObject x = copy.getJSONObject(ind);
                     JSONObject y = data.getJSONObject(ind);
                     Date t1 = null;
                     Date t2 = null;
                     try {
-                        t1 = new SimpleDateFormat(Server.State.format).parse(x.getString("Time"));
-                        t2 = new SimpleDateFormat(Server.State.format).parse(y.getString("Time"));
+                        t1 = new SimpleDateFormat(Server.State.format).parse(x.getString("time"));
+                        t2 = new SimpleDateFormat(Server.State.format).parse(y.getString("time"));
                     } catch (ParseException e) {
                         System.out.println(e.getMessage());
                     }
@@ -93,14 +93,14 @@ class ClientSock extends Thread {
         while (itr.hasNext()) {
             String ind = itr.next();
             if (copy.opt(ind) != null) {
-                if (!data.getJSONObject(ind).getString("Status").equals(copy.getJSONObject(ind).getString("Status"))) {
+                if (!data.getJSONObject(ind).getString("status").equals(copy.getJSONObject(ind).getString("status"))) {
                     JSONObject x = copy.getJSONObject(ind);
                     JSONObject y = data.getJSONObject(ind);
                     Date t1 = null;
                     Date t2 = null;
                     try {
-                        t1 = new SimpleDateFormat(Server.State.format).parse(x.getString("Time"));
-                        t2 = new SimpleDateFormat(Server.State.format).parse(y.getString("Time"));
+                        t1 = new SimpleDateFormat(Server.State.format).parse(x.getString("time"));
+                        t2 = new SimpleDateFormat(Server.State.format).parse(y.getString("time"));
                     } catch (ParseException e) {
                         System.out.println(e.getMessage());
                     }

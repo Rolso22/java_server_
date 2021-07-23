@@ -41,7 +41,7 @@ class ServerSock extends Thread {
             while (true) {
                 JSONObject line = new JSONObject(in.readLine());
                 if (Server.State.Ips.opt(line.getString("Ip")) == null) {
-                    Server.State.Ips.put(line.getString("Ip"), new JSONObject().put("Status", "activated").put("Time", new SimpleDateFormat(Server.State.format).format(new Date())));
+                    Server.State.Ips.put(line.getString("Ip"), new JSONObject().put("status", "activated").put("time", new SimpleDateFormat(Server.State.format).format(new Date())));
                     WorkDispatcher.addNode(new JSONObject().put(line.getString("Ip"), "{}"));
                 };
                 out.write(createAnswer(line.getString("Type")));

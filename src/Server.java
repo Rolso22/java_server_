@@ -102,7 +102,7 @@ public class Server {
                 System.out.println(e.getMessage());
             }
         } else {
-            if (args.length == 5) {State.Ips.put(State.discoveryIp, new JSONObject().put("Status", "activated").put("Time", new SimpleDateFormat(Server.State.format).format(new Date())));}
+            if (args.length == 5) {State.Ips.put(State.discoveryIp, new JSONObject().put("status", "activated").put("time", new SimpleDateFormat(Server.State.format).format(new Date())));}
             State.hash = CheckSum.md5(new JSONObject().put("KV", State.KV).put("Ips", State.Ips).toString());
         }
     }
