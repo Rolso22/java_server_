@@ -38,13 +38,13 @@ public class Server {
             System.out.println(e.getMessage());
             return key + " is not found";
         }
-        return data.get("Value").toString();
+        return data.get("value").toString();
     }
 
     public static void putValue(String key, String value, String time) {
         JSONObject data = new JSONObject();
-        data.put("Value", value);
-        data.put("Time", time);
+        data.put("value", value);
+        data.put("time", time);
         State.KV.put(key, data);
         update();
     }
