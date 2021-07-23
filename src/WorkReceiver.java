@@ -23,7 +23,6 @@ class ServerSock extends Thread {
             case getKV: return Server.State.KV.toString() + "\n";
             case getHashKV: return CheckSum.md5(Server.State.KV.toString()) + "\n";
             case getHashIps: return CheckSum.md5(Server.State.Ips.toString()) + "\n";
-
         }
         return "invalid\n";
     }
@@ -40,9 +39,9 @@ class ServerSock extends Thread {
         try {
             while (true) {
                 JSONObject line = new JSONObject(in.readLine());
-                if (Server.State.Ips.opt(line.getString("Ip")) == null) {
-                    Server.State.Ips.put(line.getString("Ip"), new JSONObject().put("status", "activated").put("time", new SimpleDateFormat(Server.State.format).format(new Date())));
-                    WorkDispatcher.addNode(new JSONObject().put(line.getString("Ip"), "{}"));
+                if (Server.State.Ips.opt(line.getString("IP")) == null) {
+                    Server.State.Ips.put(line.getString("IP"), new JSONObject().put("status", "activated").put("time", new SimpleDateFormat(Server.State.format).format(new Date())));
+                    WorkDispatcher.addNode(new JSONObject().put(line.getString("IP"), "{}"));
                 };
                 out.write(createAnswer(line.getString("Type")));
                 out.flush();

@@ -28,7 +28,7 @@ class ClientSock extends Thread {
 
     public void checkKV() throws IOException {
         JSONObject request = new JSONObject().put("Type", getHashKV)
-                .put("Ip", "127.0.0.1:" + Server.State.techPort)
+                .put("IP", "127.0.0.1:" + Server.State.techPort)
                 .put("Key", "")
                 .put("Value", "");
         out.write(request.toString() + "\n");
@@ -73,7 +73,7 @@ class ClientSock extends Thread {
 
     public void checkIps() throws IOException, InterruptedException {
         JSONObject request = new JSONObject().put("Type", getHashIps)
-                .put("Ip", "127.0.0.1:" + Server.State.techPort)
+                .put("IP", "127.0.0.1:" + Server.State.techPort)
                 .put("Key", "")
                 .put("Value", "");
         out.write(request.toString() + "\n");
