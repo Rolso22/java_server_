@@ -9,6 +9,7 @@ import java.util.LinkedList;
 
 class ClientSock extends Thread {
     private final Socket socket;
+    public final String ip;
     private final BufferedReader in;
     private final BufferedWriter out;
 
@@ -17,7 +18,8 @@ class ClientSock extends Thread {
     private static final String getHashIps = "get ips hash request";
     private static final String getHashKV  = "get kvs hash request";
 
-    public ClientSock(Socket socket) throws IOException {
+    public ClientSock(Socket socket, String ip) throws IOException {
+        this.ip = ip;
         this.socket = socket;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -114,6 +116,7 @@ class ClientSock extends Thread {
                 }
             } else {
                 copy.put(ind, data.get(ind));
+                WorkDispatcher.addNode(new JSONObject().put(ind, "{}"));
             }
         }
         Server.State.Ips = new JSONObject(copy.toString());
@@ -146,8 +149,16 @@ public class WorkDispatcher extends Thread {
             String nod = itr.next();
             System.out.println("nod: " + nod);
             if (Integer.parseInt(nod.split(":")[1]) == Server.State.techPort) {break;}
+            boolean flag = false;
+            for (ClientSock ip: clientList) {
+                if (ip.ip.equals(nod)) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag) {break;}
             try {
-                clientList.add(new ClientSock(new Socket(nod.split(":")[0], Integer.parseInt(nod.split(":")[1]))));
+                clientList.add(new ClientSock(new Socket(nod.split(":")[0], Integer.parseInt(nod.split(":")[1])), nod));
             } catch (IOException e) {
                 e.printStackTrace();
             }
