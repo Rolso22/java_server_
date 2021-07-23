@@ -20,7 +20,7 @@ public class HomeHandler implements HttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
         if ("GET".equals(httpExchange.getRequestMethod())) {
             handleGetRequest(httpExchange);
-        } else if ("POST".equals(httpExchange.getRequestMethod())) {
+        } else if ("PUT".equals(httpExchange.getRequestMethod())) {
             handlePostRequest(httpExchange);
         }
     }
