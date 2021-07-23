@@ -38,7 +38,6 @@ class ClientSock extends Thread {
             out.write(request.put("Type", getKV).toString() + "\n");
             out.flush();
             line = in.readLine();
-            System.out.println("kv: " + line);
             updateKV(new JSONObject(line));
         }
     }
@@ -49,14 +48,14 @@ class ClientSock extends Thread {
         while (itr.hasNext()) {
             String ind = itr.next();
             if (copy.opt(ind) != null) {
-                if (!data.getJSONObject(ind).getString("value").equals(copy.getJSONObject(ind).getString("value"))) {
+                if (!data.getJSONObject(ind).getString("Value").equals(copy.getJSONObject(ind).getString("Value"))) {
                     JSONObject x = copy.getJSONObject(ind);
                     JSONObject y = data.getJSONObject(ind);
                     Date t1 = null;
                     Date t2 = null;
                     try {
-                        t1 = new SimpleDateFormat(Server.State.format).parse(x.getString("time"));
-                        t2 = new SimpleDateFormat(Server.State.format).parse(y.getString("time"));
+                        t1 = new SimpleDateFormat(Server.State.format).parse(x.getString("Time"));
+                        t2 = new SimpleDateFormat(Server.State.format).parse(y.getString("Time"));
                     } catch (ParseException e) {
                         System.out.println(e.getMessage());
                     }
@@ -77,18 +76,13 @@ class ClientSock extends Thread {
                 .put("Ip", "127.0.0.1:" + Server.State.techPort)
                 .put("Key", "")
                 .put("Value", "");
-        System.out.println("check ips до отправки запроса о хэше");
         out.write(request.toString() + "\n");
         out.flush();
-        System.out.println("check ips после отправки запроса о хэше");
         String line = in.readLine();
-        System.out.println("check ips после отправки запроса о хэше, пришел ответ\n" + line);
         if (!line.equals(CheckSum.md5(Server.State.Ips.toString()))) {
-            System.out.println("не совпал кэш, дай мне все айпи");
             out.write(request.put("Type", getIps).toString() + "\n");
             out.flush();
             String line2 = in.readLine();
-            System.out.println("line:" + line2);
             updateIps(new JSONObject(line2));
         }
     }
@@ -105,8 +99,8 @@ class ClientSock extends Thread {
                     Date t1 = null;
                     Date t2 = null;
                     try {
-                        t1 = new SimpleDateFormat(Server.State.format).parse(x.getString("time"));
-                        t2 = new SimpleDateFormat(Server.State.format).parse(y.getString("time"));
+                        t1 = new SimpleDateFormat(Server.State.format).parse(x.getString("Time"));
+                        t2 = new SimpleDateFormat(Server.State.format).parse(y.getString("Time"));
                     } catch (ParseException e) {
                         System.out.println(e.getMessage());
                     }
@@ -127,7 +121,6 @@ class ClientSock extends Thread {
     public void run() {
         try {
             while (true) {
-                System.out.println("запустил диспетчера");
                 checkIps();
                 checkKV();
                 Thread.sleep(1000);
@@ -143,11 +136,9 @@ public class WorkDispatcher extends Thread {
     public static LinkedList<ClientSock> clientList = new LinkedList<>();
 
     public static void addNode(JSONObject node) {
-        System.out.println("node: " + node);
         Iterator<String> itr = node.keys();
         while (itr.hasNext()) {
             String nod = itr.next();
-            System.out.println("nod: " + nod);
             if (Integer.parseInt(nod.split(":")[1]) == Server.State.techPort) {break;}
             boolean flag = false;
             for (ClientSock ip: clientList) {

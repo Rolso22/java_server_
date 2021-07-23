@@ -36,13 +36,13 @@ public class Server {
             System.out.println(e.getMessage());
             return key + " is not found";
         }
-        return data.get("value").toString();
+        return data.get("Value").toString();
     }
 
     public static void putValue(String key, String value, String time) {
         JSONObject data = new JSONObject();
-        data.put("value", value);
-        data.put("time", time);
+        data.put("Value", value);
+        data.put("Time", time);
         State.KV.put(key, data);
         update();
     }
@@ -99,7 +99,7 @@ public class Server {
                 System.out.println(e.getMessage());
             }
         } else {
-            State.Ips.put(State.discoveryIp, new JSONObject().put("Status", "activated").put("time", new Date()));
+            if (args.length == 5) {State.Ips.put(State.discoveryIp, new JSONObject().put("Status", "activated").put("Time", new Date()));}
             State.hash = CheckSum.md5(new JSONObject().put("KV", State.KV).put("Ips", State.Ips).toString());
         }
     }
