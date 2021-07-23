@@ -3,6 +3,8 @@ import java.net.InetSocketAddress;
 import com.sun.net.httpserver.HttpServer;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Server {
@@ -95,11 +97,12 @@ public class Server {
                     State.hash = CheckSum.md5(new JSONObject().put("KV", State.KV).put("Ips", State.Ips).toString());
                 }
                 State.hash = CheckSum.md5(new JSONObject().put("KV", State.KV).put("Ips", State.Ips).toString());
+                dumpToDisk();
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
         } else {
-            if (args.length == 5) {State.Ips.put(State.discoveryIp, new JSONObject().put("Status", "activated").put("Time", new Date()));}
+            if (args.length == 5) {State.Ips.put(State.discoveryIp, new JSONObject().put("Status", "activated").put("Time", new SimpleDateFormat(Server.State.format).format(new Date())));}
             State.hash = CheckSum.md5(new JSONObject().put("KV", State.KV).put("Ips", State.Ips).toString());
         }
     }
