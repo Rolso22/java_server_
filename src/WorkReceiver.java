@@ -45,7 +45,6 @@ class ServerSock extends Thread {
                 try {
                     String line = in.readLine();
                     JSONObject request = new JSONObject(line);
-                    System.out.println("запрос: " + line);
                     JSONObject ip = Server.State.Ips.optJSONObject(request.getString("IP"));
                     if (ip == null) {
                         Server.State.Ips.put(request.getString("IP"), new JSONObject().put("status", activated).put("time", new SimpleDateFormat(Server.State.format).format(new Date())));
@@ -60,13 +59,13 @@ class ServerSock extends Thread {
                     out.write(createAnswer(request.getString("Type")));
                     out.flush();
                 } catch (SocketTimeoutException | NullPointerException e) {
-                    System.out.println("TIMEOUT OR NULL " + e.getMessage());
+                    System.out.println(e.getMessage());
                     socket.close();
                     return;
                 }
             }
         } catch (IOException e) {
-            System.out.println("rec run " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 }
@@ -84,7 +83,7 @@ public class WorkReceiver implements Runnable {
                 serverList.add(new ServerSock(socket));
             }
         } catch (IOException e) {
-            System.out.println("rec run2 " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 }

@@ -46,10 +46,9 @@ class ClientSock extends Thread {
                 updateKV(new JSONObject(line));
             }
         } catch (NullPointerException e) {
-            System.out.println("KV NULL: " + e.getMessage());
+            System.out.println(e.getMessage());
             Server.State.Ips.getJSONObject(ip).put("status", deprecated);
             Server.update();
-            //WorkDispatcher.clientList.remove(this);
             socket.close();
         }
     }
@@ -96,10 +95,9 @@ class ClientSock extends Thread {
                 updateIps(new JSONObject(line2));
             }
         } catch (NullPointerException e) {
-            System.out.println("Ips NULL: " + e.getMessage());
+            System.out.println(e.getMessage());
             Server.State.Ips.getJSONObject(ip).put("status", deprecated);
             Server.update();
-            //WorkDispatcher.clientList.remove(this);
             socket.close();
         }
     }
@@ -137,14 +135,10 @@ class ClientSock extends Thread {
             while (true) {
                 checkIps();
                 checkKV();
-                System.out.println("disp ip: " + ip);
                 Thread.sleep(1000);
             }
         } catch (IOException | InterruptedException e) {
-            System.out.println("disp run " + e.getMessage());
-            for (ClientSock cl : WorkDispatcher.clientList) {
-                System.out.println(cl.ip);
-            }
+            System.out.println(e.getMessage());
         }
     }
 }
@@ -172,10 +166,9 @@ public class WorkDispatcher extends Thread {
             }
             if (flag) {continue;}
             try {
-                System.out.println("addNode: " + nod);
                 clientList.add(new ClientSock(new Socket(nod.split(":")[0], Integer.parseInt(nod.split(":")[1])), nod));
             } catch (IOException e) {
-                System.out.println("disp addNode " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -192,10 +185,9 @@ public class WorkDispatcher extends Thread {
                 continue;
             }
             try {
-                System.out.println("addNode from ips: " + nod);
                 clientList.add(new ClientSock(new Socket(nod.split(":")[0], Integer.parseInt(nod.split(":")[1])), nod));
             } catch (IOException e) {
-                System.out.println("disp run node ips " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
     }
