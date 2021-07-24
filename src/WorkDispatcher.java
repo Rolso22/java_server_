@@ -49,7 +49,7 @@ class ClientSock extends Thread {
             System.out.println("KV NULL: " + e.getMessage());
             Server.State.Ips.getJSONObject(ip).put("status", deprecated);
             Server.update();
-            //WorkDispatcher.clientList.remove(this);
+            WorkDispatcher.clientList.remove(this);
             socket.close();
         }
     }
@@ -99,7 +99,7 @@ class ClientSock extends Thread {
             System.out.println("Ips NULL: " + e.getMessage());
             Server.State.Ips.getJSONObject(ip).put("status", deprecated);
             Server.update();
-            //WorkDispatcher.clientList.remove(this);
+            WorkDispatcher.clientList.remove(this);
             socket.close();
         }
     }
@@ -171,6 +171,9 @@ public class WorkDispatcher extends Thread {
                 }
             }
             if (flag) {continue;}
+            if (Server.State.Ips.getJSONObject(nod).getString("status").equals(deprecated)) {
+                continue;
+            }
             try {
                 System.out.println("addNode: " + nod);
                 clientList.add(new ClientSock(new Socket(nod.split(":")[0], Integer.parseInt(nod.split(":")[1])), nod));
