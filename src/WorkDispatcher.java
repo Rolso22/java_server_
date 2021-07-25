@@ -87,6 +87,8 @@ class ClientSock extends Thread {
             out.write(request.toString() + "\n");
             out.flush();
             String line = in.readLine();
+            System.out.print("ips line: " + line);
+            System.out.println();
             if (!line.equals(CheckSum.md5(Server.State.Ips.toString()))) {
                 out.write(request.put("Type", getIps).toString() + "\n");
                 out.flush();
@@ -131,7 +133,9 @@ class ClientSock extends Thread {
     public void run() {
         try {
             while (true) {
+                System.out.println("HERE");
                 checkIps();
+                System.out.println("HERE2");
                 checkKV();
                 System.out.println("disp ip: " + ip);
                 Thread.sleep(1000);

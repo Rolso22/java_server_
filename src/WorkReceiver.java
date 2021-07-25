@@ -25,8 +25,8 @@ class ServerSock extends Thread {
         switch (line) {
             case getIps: return Server.State.Ips.toString() + "\n";
             case getKV: return Server.State.KV.toString() + "\n";
-            case getHashKV: return CheckSum.md5(Server.State.KV.toString()) + "\n";
-            case getHashIps: return CheckSum.md5(Server.State.Ips.toString()) + "\n";
+            case getHashKV: { System.out.println("отправил kv: " + CheckSum.md5(Server.State.KV.toString())); return CheckSum.md5(Server.State.KV.toString()) + "\n"; }
+            case getHashIps: { System.out.println("отправил ips: " + CheckSum.md5(Server.State.Ips.toString())); return CheckSum.md5(Server.State.Ips.toString()) + "\n"; }
         }
         return "invalid\n";
     }
@@ -81,6 +81,7 @@ public class WorkReceiver implements Runnable {
             ServerSocket serverSocket = new ServerSocket(Server.State.techPort);
             while (true) {
                 Socket socket = serverSocket.accept();
+                System.out.println("ПРИШЕЛ ЗАПРОС!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 serverList.add(new ServerSock(socket));
             }
         } catch (IOException e) {
