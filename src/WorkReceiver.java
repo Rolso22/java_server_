@@ -59,6 +59,7 @@ class ServerSock extends Thread {
                     }
                     out.write(createAnswer(request.getString("Type")));
                     out.flush();
+                    System.out.println("отправил");
                 } catch (SocketTimeoutException | NullPointerException e) {
                     System.out.println("TIMEOUT OR NULL " + e.getMessage());
                     socket.close();

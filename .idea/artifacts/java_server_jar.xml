@@ -3,8 +3,8 @@
     <output-path>$PROJECT_DIR$/out/artifacts/java_server_jar</output-path>
     <root id="archive" name="java_server.jar">
       <element id="module-output" name="java_server" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/json-java.jar" path-in-jar="/" />
-      <element id="file-copy" path="$PROJECT_DIR$/json-java.jar" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/json-java_.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/json-java_.jar" />
     </root>
   </artifact>
 </component>
